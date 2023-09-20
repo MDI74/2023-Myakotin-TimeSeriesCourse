@@ -29,6 +29,8 @@ class TimeSeriesHierarchicalClustering:
         self.n_clusters = n_clusters
         self.method = method
         self.model = None
+        self.linkage_matrix = None
+    
 
 
     def _create_linkage_matrix(self):
@@ -73,7 +75,7 @@ class TimeSeriesHierarchicalClustering:
             The fitted model.
         """
 
-         # INSERT YOUR CODE
+        self.model = AgglomerativeClustering(compute_distances = True).fit(distance_matrix)
           
         return self
 
@@ -142,7 +144,7 @@ class TimeSeriesHierarchicalClustering:
         title : str, default = 'Dendrogram'
             Title of dendrogram.
         """
-
+        self.linkage_matrix = self._create_linkage_matrix()
         max_cluster = len(self.linkage_matrix) + 1
 
         plt.figure(figsize=(12, 9))
