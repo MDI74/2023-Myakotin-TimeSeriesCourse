@@ -67,7 +67,8 @@ class BestMatchFinder:
         
         zone_start = max(0, idx - excl_zone)
         zone_stop = min(a.shape[-1], idx + excl_zone)
-        a[zone_start : zone_stop + 1] = np.inf
+
+        a[np.int64(zone_start) : zone_stop + 1] = np.inf
 
         return a
 
@@ -98,7 +99,6 @@ class BestMatchFinder:
         
         data_len = len(distances)
         top_k_match = []
-
         distances = np.copy(distances)
         top_k_match_idx = []
         top_k_match_dist = []
@@ -149,8 +149,10 @@ class NaiveBestMatchFinder(BestMatchFinder):
             excl_zone = 0
         else:
             excl_zone = int(np.ceil(m / self.excl_zone_denom))
-        
+        q_len = len(self.query)
         # INSERT YOUR CODE
+        distances = [DTW_distance(self.query,self.ts_data[e], self.r) for e in range(0, self.ts_data.shape[1])] 
+        self.bestmatch = self._top_k_match(distances, m, bsf, excl_zone)
 
         return self.bestmatch
 

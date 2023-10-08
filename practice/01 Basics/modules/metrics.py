@@ -80,7 +80,8 @@ def DTW_distance(ts1, ts2, r=None):
     """
 
     dtw_dist = 0
-
+    r = int(np.floor(r * len(ts1)))
+    
     n, m = len(ts1), len(ts2)
     matrix = np.zeros((n + 1, m + 1))
     for i in range(n + 1):
@@ -89,10 +90,11 @@ def DTW_distance(ts1, ts2, r=None):
     matrix[0, 0] = 0
     
     for i in range(1, n + 1):
-        for j in range(1, m + 1):
+        for j in range(max(1, i - r), min(m, i + r) + 1):
             cost = (ts1[i - 1] - ts2[j - 1])**2
             
             last_min = np.min([matrix[i - 1, j], matrix[i, j - 1], matrix[i - 1, j - 1]])
+        
             matrix[i, j] = cost + last_min
             
     dtw_dist = matrix[-1][-1]
