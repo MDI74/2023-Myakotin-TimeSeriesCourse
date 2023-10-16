@@ -150,8 +150,9 @@ class NaiveBestMatchFinder(BestMatchFinder):
         else:
             excl_zone = int(np.ceil(m / self.excl_zone_denom))
         q_len = len(self.query)
-        # INSERT YOUR CODE
-        distances = [DTW_distance(self.query,self.ts_data[e], self.r) for e in range(0, self.ts_data.shape[1])] 
+
+        distances = [DTW_distance(z_normalize(self.query), z_normalize(self.ts_data[e]), self.r) for e in range(0, self.ts_data.shape[1])] 
+    
         self.bestmatch = self._top_k_match(distances, m, bsf, excl_zone)
 
         return self.bestmatch
@@ -184,9 +185,7 @@ class UCR_DTW(BestMatchFinder):
             LB_Kim lower bound.
         """
 
-        lb_Kim = 0
-
-        # INSERT YOUR CODE
+        lb_Kim = np.sqrt((subs1[0] - subs2[0])**2) + np.sqrt((subs1[-1] - subs2[-1])**2)
         
         return lb_Kim
 
@@ -211,12 +210,18 @@ class UCR_DTW(BestMatchFinder):
         lb_Keogh : float
             LB_Keogh lower bound.
         """
-        
-        lb_Keogh = 0
+    
+        result = []
 
-        # INSERT YOUR CODE
+        for i in range(len(subs1)):
+            if subs2[i] > max(subs1[max(0, i - r ):min(len(subs1), i + r + 1)]):
+                result.append((subs2[i] - max(subs2[max(0, i - r):min(len(subs1), i + r + 1)]))**2)
+            elif subs2[i] < min(subs1[max(0, i - r):min(len(subs1), i + r + 1)]):
+                result.append((subs2[i] - min(subs1[max(0, i - r):min(len(subs2), i + r + 1)]))**2)
+            else:
+                result.append(0)
 
-        return lb_Keogh
+        return sum(result)
 
 
     def perform(self):
@@ -241,8 +246,42 @@ class UCR_DTW(BestMatchFinder):
         self.lb_KeoghQC_num = 0
         self.lb_KeoghCQ_num = 0
         
-        # INSERT YOUR CODE
+        distances = []
 
+        for subseq_idx in range(N):
+            subseq = self.ts_data[subseq_idx]
+
+            if self.normalize:
+                subseq = z_normalize(subseq)
+                self.query = z_normalize(self.query)
+
+            if self._LB_Kim(self.query, subseq) > bsf:
+                self.lb_Kim_num += 1
+                dist = float("inf")
+                distances.append(dist)
+                continue   
+
+            if self._LB_Keogh(self.query, subseq, int(self.r*m)) > bsf:
+                self.lb_KeoghQC_num += 1
+                dist = float("inf")
+                distances.append(dist)
+                continue
+
+            if self._LB_Keogh(subseq, self. query, int(self.r*m)) > bsf:
+                self.lb_KeoghCQ_num += 1
+                dist = float("inf")
+                distances.append(dist)
+                continue  
+            
+
+            dtw_dist = DTW_distance(self.query, subseq, self.r)
+            distances.append(dtw_dist)
+
+            if dtw_dist < bsf:
+                bsf = dtw_dist
+
+        self.bestmatch = self._top_k_match(distances, m, bsf, excl_zone)
+              
         return {'index' : self.bestmatch['index'],
                 'distance' : self.bestmatch['distance'],
                 'lb_Kim_num': self.lb_Kim_num,
