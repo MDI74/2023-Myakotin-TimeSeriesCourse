@@ -32,30 +32,30 @@ def plot_ts(ts, title='Input Time Series'):
 
     fig.update_xaxes(showgrid=False,
                      title='Time',
-                     title_font=dict(size=22, color='black'),
-                     linecolor='#000',
+                     title_font=dict(size=22, color='white'),
+                     linecolor='#fff',
                      ticks="outside",
-                     tickfont=dict(size=18, color='black'),
+                     tickfont=dict(size=18, color='white'),
                      linewidth=2,
                      tickwidth=2)
     fig.update_yaxes(showgrid=False,
                      title='Values',
-                     title_font=dict(size=22, color='black'),
-                     linecolor='#000',
+                     title_font=dict(size=22, color='white'),
+                     linecolor='#fff',
                      ticks="outside",
-                     tickfont=dict(size=18, color='black'),
+                     tickfont=dict(size=18, color='white'),
                      zeroline=False,
                      linewidth=2,
                      tickwidth=2)
 
     fig.update_layout(title=title,
-                      title_font=dict(size=24, color='black'),
+                      title_font=dict(size=24, color='white'),
                       plot_bgcolor="rgba(0,0,0,0)",
                       paper_bgcolor='rgba(0,0,0,0)',
-                      legend=dict(font=dict(size=20, color='black'))
+                      legend=dict(font=dict(size=20, color='white'))
                       )
 
-    fig.show(renderer="colab")
+    fig.show(renderer="vscode")
 
 
 
@@ -140,7 +140,7 @@ def plot_motifs(mp, top_k_motifs):
                       paper_bgcolor='rgba(0,0,0,0)', 
                       height=1300)
 
-    fig.show(renderer="colab")
+    fig.show(renderer="vscode")
 
 
 def plot_discords(mp, top_k_discords):
@@ -200,7 +200,7 @@ def plot_discords(mp, top_k_discords):
                       plot_bgcolor="rgba(0,0,0,0)",
                       paper_bgcolor='rgba(0,0,0,0)')
 
-    fig.show(renderer="colab")
+    fig.show(renderer="vscode")
 
 
 def plot_segmentation(mp, threshold):
@@ -249,4 +249,4 @@ def plot_segmentation(mp, threshold):
                       plot_bgcolor="rgba(0,0,0,0)",
                       paper_bgcolor='rgba(0,0,0,0)', height=700)
 
-    fig.show(renderer="colab")
+    fig.show(renderer="vscode")
