@@ -1,9 +1,11 @@
 import numpy as np
 
 from modules.utils import *
+import stumpy
+from stumpy import config
 
 
-def top_k_motifs(matrix_profile, top_k=3):
+def top_k_motifs(ts, matrix_profile, top_k=3):
     """
     Find the top-k motifs based on matrix profile.
 
@@ -21,12 +23,9 @@ def top_k_motifs(matrix_profile, top_k=3):
         Top-k motifs (left and right indices and distances).
     """
 
-    motifs_idx = []
-    motifs_dist = []
-
-    # INSERT YOUR CODE
+    motifs = stumpy.motifs(ts, matrix_profile['mp'], cutoff=np.nanmean(matrix_profile['mp']), max_motifs=top_k) 
 
     return {
-        "indices" : motifs_idx,
-        "distances" : motifs_dist
+        "distances" : motifs[0],
+        "indices" : motifs[1]
         }

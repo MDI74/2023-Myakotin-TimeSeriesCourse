@@ -22,14 +22,11 @@ def top_k_discords(matrix_profile, top_k=3):
         and the nearest neighbors indices).
     """
  
-    discords_idx = []
-    discords_dist = []
-    discords_nn_idx = []
+    discords_idx = {}
 
-    # INSERT YOUR CODE
 
-    return {
-        'indices' : discords_idx,
-        'distances' : discords_dist,
-        'nn_indices' : discords_nn_idx
-        }
+    top_k_idxs = np.argsort(matrix_profile['mp'])[-top_k:]
+    
+    discords_idx['indices'] = [idx for idx in top_k_idxs]
+
+    return discords_idx

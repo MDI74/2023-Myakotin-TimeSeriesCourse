@@ -31,7 +31,6 @@ def compute_mp(ts1, m, exclusion_zone=None, ts2=None):
         (matrix profile, matrix profile index, subsequence length, 
         exclusion zone, the first and second time series).
     """
-    
     mp = stumpy.stump(ts1, m)
 
     return {'mp': mp[:, 0],
